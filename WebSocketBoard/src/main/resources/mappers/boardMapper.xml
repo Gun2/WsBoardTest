@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<select id="selectBoardList" parameterType="HashMap" resultType="BoardVO">
+	<![CDATA[
+		select * from board where 1=1 
+	]]>
+	<if test="searchKeyword!=null and !searchKeyword.equals('') ">
+		title LIKE (‘%’, #{searchKeyword}, ‘%’)
+	</if>
+		order by id desc
+		LIMIT #{pageStart}, #{perPageNum}
+	</select>
+	
+	<select id="selectBoardCount" parameterType="HashMap" resultType="int">
+	<![CDATA[
+		select count(*) from board where 1=1 
+	]]>
+	<if test="searchKeyword!=null and !searchKeyword.equals('')">
+		title LIKE (‘%’, #{searchKeyword}, ‘%’)
+	</if>
+	</select>
+	
+	<insert id="insertBoard" parameterType="BoardVO">
+	<![CDATA[
+		insert board set 
+		title = #{title},
+		content = #{content},
+		view = 0,
+		sdate = NOW(),
+		udate = NOW()
+	]]>
+	</insert>
+
+	<insert id="insertBoardDTO" parameterType="BoardDTO">
+	<![CDATA[
+		insert board set 
+		title = #{title},
+		content = #{content},
+		view = 0,
+		sdate = NOW(),
+		udate = NOW()
+	]]>
+	</insert>
+		
+	<select id="selectBoardById" parameterType="String" resultType="BoardVO">
+		select * from board where id = #{id}
+	</select>
+	
+	<delete id="deleteBoardById" parameterType="String">
+		delete from board where id = #{id}
+	</delete>
+	
+	<update id="increaseView" parameterType="String">
+		update board set view = view + 1 where id = #{id}
+	</update>
+	
+	<update id="updateBoard" parameterType="BoardVO">
+		update board set
+		title = #{title}
+		, content = #{content}
+		, udate = NOW()
+		where id = #{id}
+	</update>
+	
+	<select id="selectBoardDTOList" parameterType="HashMap" resultType="BoardDTO">
+	<![CDATA[
+		select * from board where 1=1 
+	]]>
+	<if test="searchKeyword!=null and !searchKeyword.equals('') ">
+		title LIKE (‘%’, #{searchKeyword}, ‘%’)
+	</if>
+		order by id desc
+		LIMIT #{pageStart}, #{perPageNum}
+	</select>
+</mapper>
